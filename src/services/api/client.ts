@@ -298,16 +298,25 @@ export async function getAnthropicClient({
   }
 
   // Determine authentication method based on available tokens
+  // When ANTHROPIC_BASE_URL is set (custom provider like Minimax), read the
+  // API key directly from env to bypass the OAuth/approval machinery.
+  const customBaseUrl = process.env.ANTHROPIC_BASE_URL
+  const resolvedApiKey = customBaseUrl
+    ? (apiKey || process.env.ANTHROPIC_API_KEY || getAnthropicApiKey())
+    : (isClaudeAISubscriber() ? null : apiKey || getAnthropicApiKey())
+
   const clientConfig: ConstructorParameters<typeof Anthropic>[0] = {
-    apiKey: isClaudeAISubscriber() ? null : apiKey || getAnthropicApiKey(),
-    authToken: isClaudeAISubscriber()
+    apiKey: resolvedApiKey,
+    authToken: (!customBaseUrl && isClaudeAISubscriber())
       ? getClaudeAIOAuthTokens()?.accessToken
       : undefined,
-    // Set baseURL from OAuth config when using staging OAuth
-    ...(process.env.USER_TYPE === 'ant' &&
-    isEnvTruthy(process.env.USE_STAGING_OAUTH)
-      ? { baseURL: getOauthConfig().BASE_API_URL }
-      : {}),
+    // Set baseURL: custom provider > staging OAuth > SDK default
+    ...(customBaseUrl
+      ? { baseURL: customBaseUrl }
+      : process.env.USER_TYPE === 'ant' &&
+        isEnvTruthy(process.env.USE_STAGING_OAUTH)
+        ? { baseURL: getOauthConfig().BASE_API_URL }
+        : {}),
     ...ARGS,
     ...(isDebugToStdErr() && { logger: createStderrLogger() }),
   }

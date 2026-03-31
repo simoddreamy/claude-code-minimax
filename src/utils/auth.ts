@@ -98,6 +98,9 @@ function isManagedOAuthContext(): boolean {
 /** Whether we are supporting direct 1P auth. */
 // this code is closely related to getAuthTokenSource
 export function isAnthropicAuthEnabled(): boolean {
+  // Custom base URL (e.g. Minimax): skip OAuth, use API key directly.
+  if (process.env.ANTHROPIC_BASE_URL) return false
+
   // --bare: API-key-only, never OAuth.
   if (isBareMode()) return false
 
@@ -245,6 +248,11 @@ export function getAnthropicApiKeyWithSource(
       }
     }
     return { key: null, source: 'none' }
+  }
+
+  // Custom base URL (e.g. Minimax): use ANTHROPIC_API_KEY directly, skip approval.
+  if (process.env.ANTHROPIC_BASE_URL && process.env.ANTHROPIC_API_KEY) {
+    return { key: process.env.ANTHROPIC_API_KEY, source: 'ANTHROPIC_API_KEY' }
   }
 
   // On homespace, don't use ANTHROPIC_API_KEY (use Console key instead)
