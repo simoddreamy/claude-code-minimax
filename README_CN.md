@@ -27,9 +27,9 @@ cd claude-code-minimax
 bun install
 ```
 
-### 配置
+### 配置（必需）
 
-设置环境变量：
+设置 4 个环境变量：
 
 ```bash
 export ANTHROPIC_BASE_URL="https://api.minimaxi.com/anthropic"
@@ -37,6 +37,8 @@ export ANTHROPIC_API_KEY="你的MiniMax_API密钥"
 export ANTHROPIC_MODEL="MiniMax-M2.7"
 export CLAUDE_NO_LOGIN=1
 ```
+
+> ⚠️ **重要**: `CLAUDE_NO_LOGIN=1` 必须设置，否则会要求登录 Claude.ai 账号
 
 ### 运行
 
@@ -62,15 +64,6 @@ cp .claude.json.example .claude.json
 | MiniMax-M2.7 | 200,000 | 8,192 |
 | MiniMax-M2.5 | 200,000 | 8,192 |
 | MiniMax-M2.1 | 200,000 | 8,192 |
-
-## 环境变量
-
-| 变量 | 说明 | 必需 |
-|------|------|------|
-| `ANTHROPIC_BASE_URL` | MiniMax API 端点: `https://api.minimaxi.com/anthropic` | 是 |
-| `ANTHROPIC_API_KEY` | 你的 MiniMax API 密钥 | 是 |
-| `ANTHROPIC_MODEL` | 使用的模型 (如 `MiniMax-M2.7`) | 否（默认最佳可用）|
-| `CLAUDE_NO_LOGIN` | 设置为 `1` 跳过 OAuth 登录 | 是 |
 
 ## 已知问题
 
