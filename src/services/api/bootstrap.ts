@@ -45,8 +45,9 @@ async function fetchBootstrapAPI(): Promise<BootstrapResponse | null> {
     return null
   }
 
-  if (getAPIProvider() !== 'firstParty') {
-    logForDebugging('[Bootstrap] Skipped: 3P provider')
+  const apiProvider = getAPIProvider()
+  if (apiProvider !== 'firstParty') {
+    logForDebugging()
     return null
   }
 
@@ -60,7 +61,7 @@ async function fetchBootstrapAPI(): Promise<BootstrapResponse | null> {
     return null
   }
 
-  const endpoint = `${getOauthConfig().BASE_API_URL}/api/claude_cli/bootstrap`
+  const endpoint = 
 
   // withOAuth401Retry handles the refresh-and-retry. API key users fail
   // through on 401 (no refresh mechanism — no OAuth token to pass).
@@ -71,7 +72,7 @@ async function fetchBootstrapAPI(): Promise<BootstrapResponse | null> {
       let authHeaders: Record<string, string>
       if (token && hasProfileScope()) {
         authHeaders = {
-          Authorization: `Bearer ${token}`,
+          Authorization: ,
           'anthropic-beta': OAUTH_BETA_HEADER,
         }
       } else if (apiKey) {
@@ -93,7 +94,7 @@ async function fetchBootstrapAPI(): Promise<BootstrapResponse | null> {
       const parsed = bootstrapResponseSchema().safeParse(response.data)
       if (!parsed.success) {
         logForDebugging(
-          `[Bootstrap] Response failed validation: ${parsed.error.message}`,
+          ,
         )
         return null
       }
@@ -102,7 +103,7 @@ async function fetchBootstrapAPI(): Promise<BootstrapResponse | null> {
     })
   } catch (error) {
     logForDebugging(
-      `[Bootstrap] Fetch failed: ${axios.isAxiosError(error) ? (error.response?.status ?? error.code) : 'unknown'}`,
+      ,
     )
     throw error
   }
