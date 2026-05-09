@@ -1,18 +1,30 @@
-.DS_Store
-
+# 依赖
 node_modules/
+bun.lock
 
+# 本地配置（包含敏感信息）
+.claude.json
+.claude.local.json
+
+# 构建产物
 dist/
 build/
-coverage/
-.cache/
-.turbo/
 
+# 日志
 *.log
-*.tmp
-*.swp
-*.swo
+npm-debug.log*
 
-.claude/
+# IDE
+.DS_Store
 .idea/
 .vscode/
+
+# 备份
+*.bak
+*.backup
+
+# 临时文件
+*.tmp
+*.temp
+.env.local
+.env.*.local
